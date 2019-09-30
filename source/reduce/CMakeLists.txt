@@ -90,7 +90,9 @@ target_include_directories(SPIRV-Tools-reduce
 # The reducer reuses a lot of functionality from the SPIRV-Tools library.
 target_link_libraries(SPIRV-Tools-reduce
   PUBLIC ${SPIRV_TOOLS}
-  PUBLIC SPIRV-Tools-opt)
+  PUBLIC SPIRV-Tools-opt
+  PUBLIC SPIRV-Headers::SPIRV-Headers
+  )
 
 set_property(TARGET SPIRV-Tools-reduce PROPERTY FOLDER "SPIRV-Tools libraries")
 spvtools_check_symbol_exports(SPIRV-Tools-reduce)
