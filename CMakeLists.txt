@@ -26,9 +26,8 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 include(cmake/HunterGate.cmake)
 HunterGate(
-    URL "https://github.com/cpp-pm/hunter/archive/v0.23.217.tar.gz"
-    SHA1 "4b36c0f8ffc8f3b5718d5e24629fb40c56c99b13"
-    FILEPATH "${CMAKE_CURRENT_LIST_DIR}/cmake/HunterConfig.cmake"
+    URL "https://github.com/cpp-pm/hunter/archive/v0.23.277.tar.gz"
+    SHA1 "c0dcea91a47f0f4371e32ebc8389a4a2b2822fe5"
 )
 
 project(spirv-tools VERSION 2020.4)
