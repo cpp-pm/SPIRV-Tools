@@ -28,6 +28,7 @@ include(cmake/HunterGate.cmake)
 HunterGate(
     URL "https://github.com/cpp-pm/hunter/archive/v0.23.217.tar.gz"
     SHA1 "4b36c0f8ffc8f3b5718d5e24629fb40c56c99b13"
+    FILEPATH "${CMAKE_CURRENT_LIST_DIR}/cmake/HunterConfig.cmake"
 )
 
 project(spirv-tools VERSION 2019.4)
@@ -41,9 +42,10 @@ set(SPIRV_TOOLS "SPIRV-Tools")
 
 include(GNUInstallDirs)
 
-# These should be set by the toolchain.
-#set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-#set(CMAKE_CXX_STANDARD 11)
+if(NOT HUNTER_ENABLED)
+  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+  set(CMAKE_CXX_STANDARD 11)
+endif(NOT HUNTER_ENABLED)
 
 option(SPIRV_ALLOW_TIMERS "Allow timers via clock_gettime on supported platforms" ON)
 
@@ -353,26 +355,21 @@ if (ENABLE_SPIRV_TOOLS_INSTALL)
     DESTINATION
       ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
-  install(
-    EXPORT SPIRV-ToolsTargets
-    NAMESPACE SPIRV-Tools::
-    DESTINATION ${SPIRV_CONFIG_INSTALL_DIR}
-  )
-
   write_basic_package_version_file(
-    ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfigVersion.cmake
-    VERSION ${PACKAGE_VERSION}
-    COMPATIBILITY AnyNewerVersion
-  )
-
+      ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfigVersion.cmake
+        VERSION ${PACKAGE_VERSION}
+        COMPATIBILITY AnyNewerVersion
+      )
+    
   configure_package_config_file(
-    ${PROJECT_SOURCE_DIR}/cmake/SPIRV-ToolsConfig.cmake.in
-    ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfig.cmake
-    INSTALL_DESTINATION ${SPIRV_CONFIG_INSTALL_DIR}
-  )
-
+        ${PROJECT_SOURCE_DIR}/cmake/SPIRV-ToolsConfig.cmake.in
+        ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfig.cmake
+        INSTALL_DESTINATION ${SPIRV_CONFIG_INSTALL_DIR}
+      )
+    
   install(FILES ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfigVersion.cmake
-                ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfig.cmake
-    DESTINATION ${SPIRV_CONFIG_INSTALL_DIR}
-  )
+                    ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfig.cmake
+        DESTINATION ${SPIRV_CONFIG_INSTALL_DIR}
+      )
+
 endif()

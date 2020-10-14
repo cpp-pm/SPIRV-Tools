@@ -90,9 +90,7 @@ target_include_directories(SPIRV-Tools-reduce
 # The reducer reuses a lot of functionality from the SPIRV-Tools library.
 target_link_libraries(SPIRV-Tools-reduce
   PUBLIC ${SPIRV_TOOLS}
-  PUBLIC SPIRV-Tools-opt
-  PUBLIC SPIRV-Headers::SPIRV-Headers
-  )
+  PUBLIC SPIRV-Tools-opt)
 
 set_property(TARGET SPIRV-Tools-reduce PROPERTY FOLDER "SPIRV-Tools libraries")
 spvtools_check_symbol_exports(SPIRV-Tools-reduce)
@@ -105,7 +103,7 @@ if(ENABLE_SPIRV_TOOLS_INSTALL)
   export(EXPORT SPIRV-Tools-reduceTargets FILE SPIRV-Tools-reduceTarget.cmake)
 
   spvtools_config_package_dir(SPIRV-Tools-reduce PACKAGE_DIR)
-  install(EXPORT SPIRV-Tools-reduceTargets FILE SPIRV-Tools-reduceTarget.cmake
+  install(EXPORT SPIRV-Tools-reduceTargets FILE SPIRV-Tools-reduceTarget.cmake NAMESPACE SPIRV-Tools::
   	DESTINATION ${PACKAGE_DIR})
 
   spvtools_generate_config_file(SPIRV-Tools-reduce)

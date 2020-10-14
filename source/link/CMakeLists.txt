@@ -25,7 +25,7 @@ target_include_directories(SPIRV-Tools-link
 )
 # We need the IR functionnalities from the optimizer
 target_link_libraries(SPIRV-Tools-link
-  PUBLIC SPIRV-Tools-opt SPIRV-Headers::SPIRV-Headers)
+  PUBLIC SPIRV-Tools-opt)
 
 set_property(TARGET SPIRV-Tools-link PROPERTY FOLDER "SPIRV-Tools libraries")
 spvtools_check_symbol_exports(SPIRV-Tools-link)
@@ -38,7 +38,7 @@ if(ENABLE_SPIRV_TOOLS_INSTALL)
   export(EXPORT SPIRV-Tools-linkTargets FILE SPIRV-Tools-linkTargets.cmake)
 
   spvtools_config_package_dir(SPIRV-Tools-link PACKAGE_DIR)
-  install(EXPORT SPIRV-Tools-linkTargets FILE SPIRV-Tools-linkTargets.cmake
+  install(EXPORT SPIRV-Tools-linkTargets FILE SPIRV-Tools-linkTargets.cmake NAMESPACE SPIRV-Tools::
   	DESTINATION ${PACKAGE_DIR})
 
   spvtools_generate_config_file(SPIRV-Tools-link)

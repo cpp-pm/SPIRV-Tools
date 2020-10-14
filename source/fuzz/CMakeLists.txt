@@ -307,7 +307,6 @@ if(SPIRV_BUILD_FUZZER)
 
   # The fuzzer reuses a lot of functionality from the SPIRV-Tools library.
   target_link_libraries(SPIRV-Tools-fuzz
-        PUBLIC SPIRV-Headers::SPIRV-Headers
         PUBLIC ${SPIRV_TOOLS}
         PUBLIC SPIRV-Tools-opt
         PUBLIC protobuf::libprotobuf)
@@ -323,7 +322,7 @@ if(SPIRV_BUILD_FUZZER)
       export(EXPORT SPIRV-Tools-fuzzTargets FILE SPIRV-Tools-fuzzTarget.cmake)
 
       spvtools_config_package_dir(SPIRV-Tools-fuzz PACKAGE_DIR)
-      install(EXPORT SPIRV-Tools-fuzzTargets FILE SPIRV-Tools-fuzzTarget.cmake
+      install(EXPORT SPIRV-Tools-fuzzTargets FILE SPIRV-Tools-fuzzTarget.cmake NAMESPACE SPIRV-Tools::
             DESTINATION ${PACKAGE_DIR})
 
       spvtools_generate_config_file(SPIRV-Tools-fuzz)

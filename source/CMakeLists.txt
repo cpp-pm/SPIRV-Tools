@@ -352,8 +352,8 @@ target_include_directories(${SPIRV_TOOLS}
     $<BUILD_INTERFACE:${spirv-tools_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
   PRIVATE ${spirv-tools_BINARY_DIR}
+  PRIVATE ${SPIRV_HEADER_INCLUDE_DIR}
   )
-target_link_libraries(${SPIRV_TOOLS} PUBLIC SPIRV-Headers::SPIRV-Headers)
 set_property(TARGET ${SPIRV_TOOLS} PROPERTY FOLDER "SPIRV-Tools libraries")
 spvtools_check_symbol_exports(${SPIRV_TOOLS})
 add_dependencies( ${SPIRV_TOOLS} core_tables enum_string_mapping extinst_tables )
@@ -365,8 +365,8 @@ target_include_directories(${SPIRV_TOOLS}-shared
     $<BUILD_INTERFACE:${spirv-tools_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
   PRIVATE ${spirv-tools_BINARY_DIR}
+  PRIVATE ${SPIRV_HEADER_INCLUDE_DIR}
   )
-target_link_libraries(${SPIRV_TOOLS}-shared PUBLIC SPIRV-Headers::SPIRV-Headers)
 set_target_properties(${SPIRV_TOOLS}-shared PROPERTIES CXX_VISIBILITY_PRESET hidden)
 set_property(TARGET ${SPIRV_TOOLS}-shared PROPERTY FOLDER "SPIRV-Tools libraries")
 spvtools_check_symbol_exports(${SPIRV_TOOLS}-shared)
@@ -379,8 +379,8 @@ add_dependencies( ${SPIRV_TOOLS}-shared core_tables enum_string_mapping extinst_
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
   find_library(LIBRT rt)
   if(LIBRT)
-    target_link_libraries(${SPIRV_TOOLS} PUBLIC ${LIBRT})
-    target_link_libraries(${SPIRV_TOOLS}-shared PUBLIC ${LIBRT})
+    target_link_libraries(${SPIRV_TOOLS} ${LIBRT})
+    target_link_libraries(${SPIRV_TOOLS}-shared ${LIBRT})
   endif()
 endif()
 
@@ -392,7 +392,7 @@ if(ENABLE_SPIRV_TOOLS_INSTALL)
   export(EXPORT ${SPIRV_TOOLS}Targets FILE ${SPIRV_TOOLS}Target.cmake)
 
   spvtools_config_package_dir(${SPIRV_TOOLS} PACKAGE_DIR)
-  install(EXPORT ${SPIRV_TOOLS}Targets FILE ${SPIRV_TOOLS}Target.cmake DESTINATION ${PACKAGE_DIR})
+  install(EXPORT ${SPIRV_TOOLS}Targets FILE ${SPIRV_TOOLS}Target.cmake NAMESPACE SPIRV-Tools:: DESTINATION ${PACKAGE_DIR})
 
   # Special config file for root library compared to other libs.
   file(WRITE ${CMAKE_BINARY_DIR}/${SPIRV_TOOLS}Config.cmake
