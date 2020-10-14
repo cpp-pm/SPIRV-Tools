@@ -354,21 +354,27 @@ if (ENABLE_SPIRV_TOOLS_INSTALL)
     DESTINATION
       ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
+  install(
+    EXPORT SPIRV-ToolsTargets
+    NAMESPACE SPIRV-Tools::
+    DESTINATION ${SPIRV_CONFIG_INSTALL_DIR}
+  )
+
   write_basic_package_version_file(
-      ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfigVersion.cmake
-        VERSION ${PACKAGE_VERSION}
-        COMPATIBILITY AnyNewerVersion
-      )
+    ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfigVersion.cmake
+    VERSION ${PACKAGE_VERSION}
+    COMPATIBILITY AnyNewerVersion
+  )
     
   configure_package_config_file(
-        ${PROJECT_SOURCE_DIR}/cmake/SPIRV-ToolsConfig.cmake.in
-        ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfig.cmake
-        INSTALL_DESTINATION ${SPIRV_CONFIG_INSTALL_DIR}
-      )
+    ${PROJECT_SOURCE_DIR}/cmake/SPIRV-ToolsConfig.cmake.in
+    ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfig.cmake
+    INSTALL_DESTINATION ${SPIRV_CONFIG_INSTALL_DIR}
+  )
     
   install(FILES ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfigVersion.cmake
-                    ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfig.cmake
-        DESTINATION ${SPIRV_CONFIG_INSTALL_DIR}
-      )
+    ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfig.cmake
+    DESTINATION ${SPIRV_CONFIG_INSTALL_DIR}
+  )
 
 endif()
