@@ -31,7 +31,7 @@ HunterGate(
     FILEPATH "${CMAKE_CURRENT_LIST_DIR}/cmake/HunterConfig.cmake"
 )
 
-project(spirv-tools VERSION 2019.4)
+project(spirv-tools VERSION 2020.4)
 
 hunter_add_package(SPIRV-Headers)
 find_package(SPIRV-Headers CONFIG REQUIRED)
