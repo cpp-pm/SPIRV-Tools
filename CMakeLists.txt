@@ -45,9 +45,6 @@ if(NOT HUNTER_ENABLED)
   set(CMAKE_CXX_STANDARD 11)
 endif(NOT HUNTER_ENABLED)
 
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(CMAKE_CXX_STANDARD 11)
-
 option(SPIRV_ALLOW_TIMERS "Allow timers via clock_gettime on supported platforms" ON)
 
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
@@ -397,7 +394,6 @@ if (ENABLE_SPIRV_TOOLS_INSTALL)
       ${CMAKE_CURRENT_BINARY_DIR}/SPIRV-Tools-shared.pc
     DESTINATION
       ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
-
 
   install(
       EXPORT SPIRV-ToolsTargets
