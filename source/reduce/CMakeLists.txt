@@ -96,24 +96,16 @@ set_property(TARGET SPIRV-Tools-reduce PROPERTY FOLDER "SPIRV-Tools libraries")
 spvtools_check_symbol_exports(SPIRV-Tools-reduce)
 
 if(ENABLE_SPIRV_TOOLS_INSTALL)
-  if(HUNTER_ENABLED)
-    install(TARGETS SPIRV-Tools-reduce
-    EXPORT ${SPIRV_TOOLS}Targets
+  install(TARGETS SPIRV-Tools-reduce EXPORT SPIRV-Tools-reduceTargets
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-  else(HUNTER_ENABLED)
-    install(TARGETS SPIRV-Tools-reduce EXPORT SPIRV-Tools-reduceTargets
-      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-    export(EXPORT SPIRV-Tools-reduceTargets FILE SPIRV-Tools-reduceTarget.cmake)
+  export(EXPORT SPIRV-Tools-reduceTargets FILE SPIRV-Tools-reduceTarget.cmake)
 
-    spvtools_config_package_dir(SPIRV-Tools-reduce PACKAGE_DIR)
-    install(EXPORT SPIRV-Tools-reduceTargets FILE SPIRV-Tools-reduceTarget.cmake
-  	  DESTINATION ${PACKAGE_DIR})
+  spvtools_config_package_dir(SPIRV-Tools-reduce PACKAGE_DIR)
+  install(EXPORT SPIRV-Tools-reduceTargets FILE SPIRV-Tools-reduceTarget.cmake
+          NAMESPACE ${SPIRV_TOOLS_NS} DESTINATION ${PACKAGE_DIR})
 
-    spvtools_generate_config_file(SPIRV-Tools-reduce)
-    install(FILES ${CMAKE_BINARY_DIR}/SPIRV-Tools-reduceConfig.cmake DESTINATION ${PACKAGE_DIR})
-  endif(HUNTER_ENABLED)
+  spvtools_generate_config_file(SPIRV-Tools-reduce)
+  install(FILES ${CMAKE_BINARY_DIR}/SPIRV-Tools-reduceConfig.cmake DESTINATION ${PACKAGE_DIR})
 endif(ENABLE_SPIRV_TOOLS_INSTALL)
