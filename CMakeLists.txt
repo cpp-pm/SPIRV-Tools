@@ -205,7 +205,7 @@ endif()
 if(NOT SPIRV_SKIP_TESTS)
   find_host_package(PythonInterp 3 REQUIRED)
 else()
-  find_host_package(PythonInterp 2.7 REQUIRED)
+  find_host_package(PythonInterp REQUIRED)
 endif()
 
 # Check for symbol exports on Linux.
