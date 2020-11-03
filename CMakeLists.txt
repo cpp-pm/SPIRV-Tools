@@ -26,24 +26,26 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 include(cmake/HunterGate.cmake)
 HunterGate(
-    URL "https://github.com/cpp-pm/hunter/archive/v0.23.277.tar.gz"
-    SHA1 "c0dcea91a47f0f4371e32ebc8389a4a2b2822fe5"
+    URL "https://github.com/cpp-pm/hunter/archive/v0.23.280.tar.gz"
+    SHA1 "065d44b4e42e959eb5bdf1f6fdbf9c5c7c2762bd"
     FILEPATH "${CMAKE_CURRENT_LIST_DIR}/cmake/HunterConfig.cmake"
 )
 
 project(spirv-tools VERSION 2020.1)
 enable_testing()
 set(SPIRV_TOOLS "SPIRV-Tools")
+set(SPIRV_TOOLS_NS ${SPIRV_TOOLS}::)
 
 hunter_add_package(SPIRV-Headers)
 find_package(SPIRV-Headers CONFIG REQUIRED)
 set(SPIRV-Headers_SOURCE_DIR ${SPIRV-HEADERS_ROOT})
 
 include(GNUInstallDirs)
+
 if(NOT HUNTER_ENABLED)
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
   set(CMAKE_CXX_STANDARD 11)
-endif(NOT HUNTER_ENABLED)
+endif()
 
 option(SPIRV_ALLOW_TIMERS "Allow timers via clock_gettime on supported platforms" ON)
 
@@ -200,7 +202,11 @@ if(NOT COMMAND find_host_program)
 endif()
 
 # Tests require Python3
-find_host_package(PythonInterp 3 REQUIRED)
+if(NOT SPIRV_SKIP_TESTS)
+  find_host_package(PythonInterp 3 REQUIRED)
+else()
+  find_host_package(PythonInterp REQUIRED)
+endif()
 
 # Check for symbol exports on Linux.
 # At the moment, this check will fail on the OSX build machines for the Android NDK.
@@ -238,7 +244,7 @@ if(ENABLE_SPIRV_TOOLS_INSTALL)
       "find_dependency(${SPIRV_TOOLS})\n"
       "include(\${CMAKE_CURRENT_LIST_DIR}/${TARGET}Targets.cmake)\n"
       "set(${TARGET}_LIBRARIES ${TARGET})\n"
-      "get_target_property(${TARGET}_INCLUDE_DIRS ${TARGET} INTERFACE_INCLUDE_DIRECTORIES)\n")
+      "get_target_property(${TARGET}_INCLUDE_DIRS ${SPIRV_TOOLS_NS}${TARGET} INTERFACE_INCLUDE_DIRECTORIES)\n")
   endmacro()
 endif()
 
@@ -342,38 +348,10 @@ add_custom_target(spirv-tools-shared-pkg-config ALL
 
 # Install pkg-config file
 if (ENABLE_SPIRV_TOOLS_INSTALL)
-
-  include(CMakePackageConfigHelpers)
-  set(SPIRV_CONFIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/SPIRV-Tools)
-
   install(
     FILES
       ${CMAKE_CURRENT_BINARY_DIR}/SPIRV-Tools.pc
       ${CMAKE_CURRENT_BINARY_DIR}/SPIRV-Tools-shared.pc
     DESTINATION
       ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
-
-  install(
-      EXPORT SPIRV-ToolsTargets
-      NAMESPACE SPIRV-Tools::
-      DESTINATION ${SPIRV_CONFIG_INSTALL_DIR}
-  )
-    
-  write_basic_package_version_file(
-      ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfigVersion.cmake
-      VERSION ${PACKAGE_VERSION}
-      COMPATIBILITY AnyNewerVersion
-  )
-        
-  configure_package_config_file(
-      ${PROJECT_SOURCE_DIR}/cmake/SPIRV-ToolsConfig.cmake.in
-      ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfig.cmake
-      INSTALL_DESTINATION ${SPIRV_CONFIG_INSTALL_DIR}
-  )
-        
-  install(FILES ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfigVersion.cmake
-      ${PROJECT_BINARY_DIR}/SPIRV-ToolsConfig.cmake
-      DESTINATION ${SPIRV_CONFIG_INSTALL_DIR}
-  )
-
 endif()
