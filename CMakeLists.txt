@@ -31,7 +31,7 @@ HunterGate(
     FILEPATH "${CMAKE_CURRENT_LIST_DIR}/cmake/HunterConfig.cmake"
 )
 
-project(spirv-tools VERSION 2020.1)
+project(spirv-tools VERSION 2020.6)
 enable_testing()
 set(SPIRV_TOOLS "SPIRV-Tools")
 set(SPIRV_TOOLS_NS ${SPIRV_TOOLS}::)
