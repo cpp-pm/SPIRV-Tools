@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.2)
 if (POLICY CMP0048)
   cmake_policy(SET CMP0048 NEW)
 endif()
@@ -24,14 +24,28 @@ if (POLICY CMP0054)
 endif()
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-project(spirv-tools)
+include(cmake/HunterGate.cmake)
+HunterGate(
+    URL "https://github.com/cpp-pm/hunter/archive/v0.23.280.tar.gz"
+    SHA1 "065d44b4e42e959eb5bdf1f6fdbf9c5c7c2762bd"
+    FILEPATH "${CMAKE_CURRENT_LIST_DIR}/cmake/HunterConfig.cmake"
+)
+
+project(spirv-tools VERSION 2020.4)
 enable_testing()
 set(SPIRV_TOOLS "SPIRV-Tools")
+set(SPIRV_TOOLS_NS ${SPIRV_TOOLS}::)
+
+hunter_add_package(SPIRV-Headers)
+find_package(SPIRV-Headers CONFIG REQUIRED)
+set(SPIRV-Headers_SOURCE_DIR ${SPIRV-HEADERS_ROOT})
 
 include(GNUInstallDirs)
 
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(CMAKE_CXX_STANDARD 11)
+if(NOT HUNTER_ENABLED)
+  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+  set(CMAKE_CXX_STANDARD 11)
+endif()
 
 option(SPIRV_ALLOW_TIMERS "Allow timers via clock_gettime on supported platforms" ON)
 
@@ -188,7 +202,11 @@ if(NOT COMMAND find_host_program)
 endif()
 
 # Tests require Python3
-find_host_package(PythonInterp 3 REQUIRED)
+if(NOT SPIRV_SKIP_TESTS)
+  find_host_package(PythonInterp 3 REQUIRED)
+else()
+  find_host_package(PythonInterp REQUIRED)
+endif()
 
 # Check for symbol exports on Linux.
 # At the moment, this check will fail on the OSX build machines for the Android NDK.
@@ -226,7 +244,7 @@ if(ENABLE_SPIRV_TOOLS_INSTALL)
       "find_dependency(${SPIRV_TOOLS})\n"
       "include(\${CMAKE_CURRENT_LIST_DIR}/${TARGET}Targets.cmake)\n"
       "set(${TARGET}_LIBRARIES ${TARGET})\n"
-      "get_target_property(${TARGET}_INCLUDE_DIRS ${TARGET} INTERFACE_INCLUDE_DIRECTORIES)\n")
+      "get_target_property(${TARGET}_INCLUDE_DIRS ${SPIRV_TOOLS_NS}${TARGET} INTERFACE_INCLUDE_DIRECTORIES)\n")
   endmacro()
 endif()
 
