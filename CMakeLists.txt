@@ -26,8 +26,8 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 include(cmake/HunterGate.cmake)
 HunterGate(
-    URL "https://github.com/cpp-pm/hunter/archive/v0.23.280.tar.gz"
-    SHA1 "065d44b4e42e959eb5bdf1f6fdbf9c5c7c2762bd"
+    URL "https://github.com/cpp-pm/hunter/archive/v0.23.291.tar.gz"
+    SHA1 "4f57243b24a02b9c7ec5ea02c09d5c77c6a97cba"
     FILEPATH "${CMAKE_CURRENT_LIST_DIR}/cmake/HunterConfig.cmake"
 )
 
